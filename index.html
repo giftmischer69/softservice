@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button>Run Tone Js</button>
+
+    <script type='text/javascript' src='./Tone.js'></script>
+
+    <script>
+        //attach a click listener to a play button
+        document.querySelector('button')?.addEventListener('click', async () => {
+            await Tone.start()
+            console.log('audio is ready')
+        })
+
+        const drumPlayer = new Tone.Player("./songs/einsamkeit/Drums.mp3").toDestination();
+        const bassPlayer = new Tone.Player("./songs/einsamkeit/Bass.mp3").toDestination();
+        const pianoPlayer = new Tone.Player("./songs/einsamkeit/Piano.mp3").toDestination();
+        const piano2Player = new Tone.Player("./songs/einsamkeit/Piano_2.mp3").toDestination();
+
+        Tone.loaded().then(() => {
+            player.start();
+        });
+
+
+    </script>
+</body>
+</html>
