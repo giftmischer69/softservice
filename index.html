@@ -2,27 +2,90 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <button>Run Tone Js</button>
+    <title>Stem Player</title>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type='text/javascript' src='./Tone.js'></script>
 
+    <link rel="stylesheet" href="https://unpkg.com/gralig" />
+</head>
+<body>
+    <button id="init-tone-js-btn" class="gra-btn">Init Tone Js</button>
+    <br>
+    <button id="play-song-btn" class="gra-btn">Play Song</button>
+    <br>
+    <button id="stop-song-btn" class="gra-btn">Stop Song</button>
+    <br>
+    <!-- TODO change to check box https://gralig.com/docs/switch -->
+    <button id="mute-drums-btn" class="gra-btn">Mute Drums</button>
+    <br>
+    <button id="mute-bass-btn" class="gra-btn">Mute Bass</button>
+    <br>
+    <button id="mute-piano-btn" class="gra-btn">Mute Piano</button>
+    <br>
+    <button id="mute-piano2-btn" class="gra-btn">Mute Piano2</button>
+
+
     <script>
-        //attach a click listener to a play button
-        document.querySelector('button')?.addEventListener('click', async () => {
+        // TODO: Auto Load on first play click
+        // attach a click listener to a play button
+        // document.querySelector('button')?.addEventListener('click', async () => {
+        //     await Tone.start()
+        //     console.log('audio is ready')
+        // })
+        // NOTE: Before load everything disabled when loaded change css classes
+        // Tone.loaded().then(() => {
+        //     drumPlayer.start(); bassPlayer.start(); pianoPlayer.start(); piano2Player.start();
+        // });
+
+        $( "#init-tone-js-btn" ).click(async () => {
             await Tone.start()
             console.log('audio is ready')
-        })
+        });
 
-        const drumPlayer = new Tone.Player("./songs/einsamkeit/Drums.mp3").toDestination();
-        const bassPlayer = new Tone.Player("./songs/einsamkeit/Bass.mp3").toDestination();
-        const pianoPlayer = new Tone.Player("./songs/einsamkeit/Piano.mp3").toDestination();
-        const piano2Player = new Tone.Player("./songs/einsamkeit/Piano_2.mp3").toDestination();
+        const baseUrl = "https://blog.genos.se/softservice/songs/einsamkeit/";
+        var stemPlayer = new Tone.Players({
+            "drums":  baseUrl + "Drums.mp3",
+            "bass":   baseUrl + "Bass.mp3",
+            "piano":  baseUrl + "Piano.mp3",
+            "piano2": baseUrl + "Piano_2.mp3"
+        });
+        stemPlayer.toDestination();
 
-        Tone.loaded().then(() => {
-            player.start();
+        const drumsVol = new Tone.Volume(0).toDestination();
+        const bassVol = new Tone.Volume(0).toDestination();
+        const pianoVol = new Tone.Volume(0).toDestination();
+        const piano2Vol = new Tone.Volume(0).toDestination();
+
+        $( "#play-song-btn" ).click(async () => {
+            stemPlayer.player("drums").connect(drumsVol).start();
+            stemPlayer.player("bass").connect(bassVol).start();
+            stemPlayer.player("piano").connect(pianoVol).start();
+            stemPlayer.player("piano2").connect(piano2Vol).start();
+        });
+
+        $( "#stop-song-btn" ).click(async () => {
+            stemPlayer.stopAll();
+        });
+
+        $( "#mute-drums-btn" ).click(async () => {
+            drumsVol.mute = true;
+            console.log("drums muted");
+        });
+
+        $( "#mute-bass-btn" ).click(async () => {
+            bassVol.mute = true;
+            console.log("bass muted");
+        });
+
+        $( "#mute-piano-btn" ).click(async () => {
+            pianoVol.mute = true;
+            console.log("piano muted");
+        });
+
+        $( "#mute-piano2-btn" ).click(async () => {
+            piano2Vol.mute = true;
+            console.log("piano2 muted");
         });
 
 
